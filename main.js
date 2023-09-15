@@ -15,24 +15,26 @@ $(document).ready(function() {
 
     $('#btn-buscar-cep').click(function() {
         const cep = $('#cep').val();
-        const endpoint = `https://viacep.com.br/ws/${cep}/json/resposta`;
+        const endpoint = `https://viacep.com.br/ws/${cep}/json`;
         const botao = $(this);
         $(botao).find('i').addClass('d-none');
         $(botao).find('span').removeClass('d-none');
 
-       // $.ajax(endpoint).done(function(resposta) {
-         //   const logradouro = resposta.logradouro;
-         //   const bairro = resposta.bairro;
-        //    const cidade = resposta.localidade;
-        //    const estado = resposta.uf;
-       //     const endereco = `${logradouro}, ${bairro} - ${cidade} - ${estado}`;
-        //    $('#endereco').val(endereco);
+         // $.ajax(endpoint).done(function(resposta) {
+         //    const logradouro = resposta.logradouro;
+         //    const bairro = resposta.bairro;
+         //    const cidade = resposta.localidade;
+         //    const estado = resposta.uf;
+         //    const endereco = `${logradouro}, ${bairro} - ${cidade} - ${estado}`;
+         //    $('#endereco').val(endereco);
 
-        //   setTimeout(function(){
-         //     $(botao).find('i').removeclass('d-none');
-          //    $(botao).find('span').addclass('d-none');  
-           // }, 400);
-           fetch(endpoint).then(function(resposta) {
+         // setTimeout(function(){
+         //    $(botao).find('i').removeclass('d-none');
+         //    $(botao).find('span').addclass('d-none');  
+         //  }, 4000);
+         // })
+           fetch(endpoint)
+           .then(function(resposta) {
                return resposta.json();
            })
            .then(function(json) {
@@ -42,12 +44,27 @@ $(document).ready(function() {
                 const estado = json.uf;
                 const endereco = `${logradouro}, ${bairro} - ${cidade} - ${estado}`;
                 $('#endereco').val(endereco);
-
-                setTimeout(function(){
-                    $(botao).find('i').removeclass('d-none');
-                    $(botao).find('span').addclass('d-none');  
-          }, 400);
-
+             }) 
+             .catch(function(erro)  {
+                alert("ocorreu um erro ao procurar o endereço, tente novamente mais tarde")
+             }) 
+             
+             .finally(function(){
+                   setTimeout(function(){
+                    $(botao).find('i').removeClass('d-none');
+                    $(botao).find('span').addClass('d-none');  
+           }, 1000);
+            
        })
+                
+   })
+
+    $('#formulario-pedido').submit(function(evento) {
+        evento.preventDefault();
+
+        if ($('#nome').val().length == 0) {
+            throw new Error('Digite o nome');
+       }
    })
 })
+
